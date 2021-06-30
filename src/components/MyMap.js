@@ -8,15 +8,36 @@ class MyMap extends Component {
 	state = { }
 
 	componentDidMount() {
-		console.log(mapData);
+		// console.log(mapData);
 	}
 
 	countryStyle = {
 		fillColor: 'red',
-		fillOpacity: 0.8,
+		fillOpacity: .8,
 		color: 'black',
 		weight: 2,
 		dashArray: 2,
+	};
+
+	changeCountryColor = e => {
+		e.target.setStyle({
+			color: 'green',
+			fillColor: 'yellow',
+			fillOpacity: .8,
+		});
+	}
+
+	onEachCountry = (feature, layer) => {
+		const countryName = feature.properties.ADMIN;
+		// console.log(countryName)
+		layer.bindPopup(`${countryName} ^^`);
+
+		layer.on({
+			click: this.changeCountryColor,
+			mouseover: e => {
+				// console.log(e.target.feature.properties.ISO_A3);
+			}
+		});
 	};
 
 	render() {
@@ -33,6 +54,7 @@ class MyMap extends Component {
 					<GeoJSON
 						data={mapData.features}
 						style={this.countryStyle}
+						onEachFeature={this.onEachCountry}
 					/>
 				</MapContainer>
 			</div>
