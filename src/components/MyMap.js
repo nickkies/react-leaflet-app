@@ -5,7 +5,9 @@ import 'leaflet/dist/leaflet.css';
 import './MyMap.css';
 
 class MyMap extends Component {
-	state = { }
+	state = { color: "#ffffff"};
+
+	color = ['green', 'blue', 'yellow', 'orange', 'gray'];
 
 	componentDidMount() {
 		// console.log(mapData);
@@ -13,7 +15,7 @@ class MyMap extends Component {
 
 	countryStyle = {
 		fillColor: 'red',
-		fillOpacity: .8,
+		fillOpacity: 1,
 		color: 'black',
 		weight: 2,
 		dashArray: 2,
@@ -22,7 +24,7 @@ class MyMap extends Component {
 	changeCountryColor = e => {
 		e.target.setStyle({
 			color: 'green',
-			fillColor: 'yellow',
+			fillColor: this.state.color,
 			fillOpacity: .8,
 		});
 	}
@@ -32,6 +34,10 @@ class MyMap extends Component {
 		// console.log(countryName)
 		layer.bindPopup(`${countryName} ^^`);
 
+		layer.options.fillOpacity = Math.random() || .1;
+		// const colorIndex = Math.floor(Math.random() * this.color.length);
+		// layer.options.fillColor = this.color[colorIndex];
+
 		layer.on({
 			click: this.changeCountryColor,
 			mouseover: e => {
@@ -40,7 +46,13 @@ class MyMap extends Component {
 		});
 	};
 
+	colorChange = e => {
+		this.setState({color: e.target.value});
+	};
+
 	render() {
+		const color = this.state.color;
+
 		return (
 			<div style={{width: '100vh'}}>
 				<h1 style={{textAlign: 'center'}}>My Map</h1>
@@ -57,6 +69,7 @@ class MyMap extends Component {
 						onEachFeature={this.onEachCountry}
 					/>
 				</MapContainer>
+				<input type="color" value={color} onChange={this.colorChange}/>
 			</div>
 		);
 	}
